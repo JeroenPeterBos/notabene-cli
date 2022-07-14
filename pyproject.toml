@@ -1,5 +1,22 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
 [tool.pytest.ini_options]
+addopts = "--cov=notabene"
+testpaths = [
+    "tests"
+]
 filterwarnings = [
     "ignore::DeprecationWarning",
     "ignore::UserWarning",
 ]
+
+[tool.flake8]
+statistics = true
+
+[tool.coverage.run]
+data_file = "build/.coverage"
+
+[tool.coverage.html]
+directory = "build/coverage"

@@ -5,20 +5,22 @@ CLI_NAME = notabene
 PY_VERSION = 3.8
 
 
-install: 
+env:
 	conda env create -f environment.yml
 
+install: 
+	pip install -r requirements.txt
+
 lint:
-	flake8 $(PROJ_SLUG)
+	flake8p $(PROJ_SLUG)
 
 test: lint
-	pytest --cov-report term --cov=$(PROJ_SLUG) tests/
+	pytest
 
-coverage: lint
-	pytest --cov-report html:build/coverage/html --cov=$(PROJ_SLUG) tests/
-	coverage erase
+coverage: test
+	coverage html
 
-docs: coverage licenses
+docs: test licenses
 	sphinx-build -b html "docs" "build/docs"
 
 package: clean docs
@@ -32,7 +34,6 @@ clean:
 	rm -rf build
 	rm -rf *.egg-info
 	rm -rf */__pycache__
-	coverage erase
 
 licenses:
 	pip-licenses
