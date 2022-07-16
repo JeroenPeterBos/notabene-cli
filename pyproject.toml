@@ -12,6 +12,30 @@ filterwarnings = [
     "ignore::UserWarning",
 ]
 
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+requires = tox-conda
+envlist = py36, py37, py38
+
+[testenv]
+deps =
+    pytest-cov
+    pytest
+commands =
+    pytest
+"""
+
+[tool.coverage.run]
+data_file = "build/.coverage"
+branch = true
+
+[tool.coverage.report]
+fail_under = 95
+
+[tool.coverage.html]
+directory = "build/coverage"
+
 [tool.flake8]
 statistics = true
 max-line-length = 88
@@ -26,9 +50,3 @@ target-version = ["py38"]
 [tool.isort]
 profile = "black"
 py_version = 38
-
-[tool.coverage.run]
-data_file = "build/.coverage"
-
-[tool.coverage.html]
-directory = "build/coverage"

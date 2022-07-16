@@ -5,5 +5,8 @@ __pycache__
 .coverage
 *.egg-info
 
+.tox
+.pytest_cache
+
 build
 docs/build

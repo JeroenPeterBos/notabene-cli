@@ -1,5 +1,4 @@
 click
-pip-check-reqs
 pip-licenses
 flake8
 flake8-docstrings
@@ -8,8 +7,8 @@ black
 isort
 pytest
 pytest-cov
-pytest-pythonpath
 setuptools
 Sphinx
 tox
+tox-conda
 twine
