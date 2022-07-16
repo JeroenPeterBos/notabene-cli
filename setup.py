@@ -9,7 +9,6 @@ This file is used to create the package we'll publish to PyPI.
 """
 
 import importlib.util
-import os
 from codecs import open  # Use a consistent encoding.
 from os import path
 from pathlib import Path
@@ -41,13 +40,8 @@ vmod = importlib.util.module_from_spec(vspec)
 vspec.loader.exec_module(vmod)
 version = getattr(vmod, "__version__")
 
-# If the environment has a build number set...
-if os.getenv("buildnum") is not None:
-    # ...append it to the version.
-    version = f"{version}.{os.getenv('buildnum')}"
-
 setup(
-    name="notabene-cli",
+    name="notabene",
     description="The command line interface for interacting with notabene.",
     long_description=long_description,
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
