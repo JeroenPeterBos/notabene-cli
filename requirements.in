@@ -1,0 +1,18 @@
+click
+
+# DEVELOPMENT REQUIREMENTS
+# The above line is detected by the setup.py script to separate notabene requirements from development requirements
+
+pip-licenses
+flake8
+flake8-docstrings
+flake8-pyproject
+black
+isort
+pytest
+pytest-cov
+setuptools
+Sphinx
+tox
+tox-conda
+twine

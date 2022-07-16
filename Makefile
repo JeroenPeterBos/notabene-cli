@@ -6,10 +6,12 @@ PY_VERSION = 3.8
 
 
 env:
-	conda env create -f environment.yml
+	conda create -n $(PROJ_SLUG) python=$(PY_VERSION) pip -y
+	conda run -n $(PROJ_SLUG) pip install pip-tools
+	conda run -n $(PROJ_SLUG) pip-sync
 
 install: 
-	pip install -r requirements.txt
+	pip-sync
 
 format:
 	isort .
