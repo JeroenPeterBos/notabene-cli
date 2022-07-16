@@ -14,6 +14,18 @@ filterwarnings = [
 
 [tool.flake8]
 statistics = true
+max-line-length = 88
+extend-gnore = [
+    "E203",
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py38"]
+
+[tool.isort]
+profile = "black"
+py_version = 38
 
 [tool.coverage.run]
 data_file = "build/.coverage"

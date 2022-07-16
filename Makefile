@@ -11,7 +11,11 @@ env:
 install: 
 	pip install -r requirements.txt
 
-lint:
+format:
+	isort .
+	black .
+
+lint: format
 	flake8p $(PROJ_SLUG)
 
 test: lint
@@ -36,5 +40,4 @@ clean:
 	rm -rf */__pycache__
 
 licenses:
-	pip-licenses
 	pip-licenses --with-url --format=rst --output-file docs/licenses.rst

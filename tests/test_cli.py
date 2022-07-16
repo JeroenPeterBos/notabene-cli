@@ -8,12 +8,10 @@
 This is the test module for the project's command-line interface (CLI)
 module.
 """
-# fmt: off
-import notabene.cli as cli
-from notabene import __version__
-# fmt: on
 from click.testing import CliRunner, Result
 
+import notabene.cli as cli
+from notabene import __version__
 
 # To learn more about testing Click applications, visit the link below.
 # http://click.pocoo.org/5/testing/

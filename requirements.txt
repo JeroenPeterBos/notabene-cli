@@ -4,6 +4,8 @@ pip-licenses
 flake8
 flake8-docstrings
 flake8-pyproject
+black
+isort
 pytest
 pytest-cov
 pytest-pythonpath

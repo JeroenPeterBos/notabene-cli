@@ -19,7 +19,9 @@ It can be used as a handy facility for running the task from a command line.
 .. moduleauthor:: Jeroen Peter Bos <jeroen@notabene.cloud>
 """
 import logging
+
 import click
+
 from .__init__ import __version__
 
 LOGGING_LEVELS = {
