@@ -59,6 +59,19 @@ min-public-methods = 0
 [tool.pylint.format]
 max-line-length = 88
 
+[tool.pylint."messages control"]
+disable = [
+    "redefined-outer-name",
+    "raw-checker-failed", 
+    "bad-inline-option", 
+    "locally-disabled", 
+    "file-ignored", 
+    "suppressed-message", 
+    "useless-suppression", 
+    "deprecated-pragma", 
+    "use-symbolic-message-instead"
+]
+
 [tool.black]
 line-length = 88
 target-version = ["py38"]
