@@ -3,7 +3,6 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
-addopts = "--cov=notabene"
 testpaths = [
     "tests"
 ]
@@ -37,11 +36,28 @@ fail_under = 95
 directory = "build/coverage"
 
 [tool.flake8]
+exclude = [
+    ".git", 
+    ".tox",
+    ".vscode",
+    ".pytest_cache", 
+    "__pycache__", 
+    "build"
+]
 statistics = true
 max-line-length = 88
-extend-gnore = [
+extend-ignore = [
     "E203",
 ]
+
+[tool.pylint.main]
+jobs = 0
+
+[tool.pylint.design]
+min-public-methods = 0
+
+[tool.pylint.format]
+max-line-length = 88
 
 [tool.black]
 line-length = 88

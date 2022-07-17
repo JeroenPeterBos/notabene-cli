@@ -13,4 +13,4 @@ It can be used as a handy facility for running the task from a command line.
 import notabene.template as _template
 from notabene.base import base as cli
 
-__all__ = [cli, _template]
+__all__ = ["cli", "_template"]

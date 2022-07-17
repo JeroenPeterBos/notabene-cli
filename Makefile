@@ -18,10 +18,11 @@ format:
 	black .
 
 lint: format
-	flake8p $(PROJ_SLUG)
+	flake8p $(PROJ_SLUG) tests
+	pylint $(PROJ_SLUG) tests
 
 test: lint
-	pytest
+	pytest --cov=$(PROJ_SLUG)
 
 coverage: test
 	coverage html

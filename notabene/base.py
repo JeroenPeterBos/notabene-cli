@@ -1,4 +1,7 @@
+"""Base cli setup and click extentions."""
 import logging
+import os
+from pathlib import Path
 
 import click
 
@@ -13,6 +16,28 @@ LOGGING_LEVELS = {
 }
 
 
+class Project:
+    """Project object that is used to pass information troughout the cli."""
+
+    def __init__(self, verbose: int) -> None:
+        """Create the `Project` object to be used troughout the cli.
+
+        Args:
+            verbose (int): The verbosity level for logging messages.
+        """
+        self.verbose = verbose
+        self.root = self._find_project_root()
+        self.template_dir = self.root / ".notabene" / "templates"
+
+    def _find_project_root(self) -> Path:
+        cwd = path = Path(os.getcwd())
+        while not (path / "pyproject.toml").exists():
+            if len(path.parents) == 0:
+                return cwd
+            path = path.parent
+        return path
+
+
 @click.group()
 @click.option(
     "--verbose",
@@ -24,6 +49,8 @@ LOGGING_LEVELS = {
 @click.pass_context
 def base(ctx: click.Context, verbose: int):
     """Run notabene."""
+    ctx.obj = Project(verbose=verbose)
+
     if verbose >= 0:
         logging.basicConfig(
             level=LOGGING_LEVELS[verbose]
@@ -32,12 +59,27 @@ def base(ctx: click.Context, verbose: int):
         )
         click.echo(
             click.style(
-                f"Verbose logging is enabled. (LEVEL={logging.getLogger().getEffectiveLevel()})",
+                "Verbose logging is enabled."
+                f"(LEVEL={logging.getLogger().getEffectiveLevel()})",
                 fg="yellow",
             )
         )
-    ctx.obj = dict()
-    ctx.obj["verbose"] = verbose
+
+
+@base.command()
+@click.pass_obj
+def info(project: Project):
+    """Show information about the current project."""
+    click.echo(click.style("Project contextual information:", fg="cyan", bold=True))
+    properties = [
+        a
+        for a in dir(project)
+        if not a.startswith("__")
+        and not a.startswith("_")
+        and not callable(getattr(project, a))
+    ]
+    for attr in sorted(properties):
+        click.echo(f"{attr:<20}: {getattr(project, attr)}")
 
 
 @base.command()

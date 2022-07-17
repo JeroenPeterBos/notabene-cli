@@ -10,4 +10,4 @@ The command line interface for interacting with notabene.
 
 from .version import __release__, __version__
 
-__all__ = [__release__, __version__]
+__all__ = ["__release__", "__version__"]
