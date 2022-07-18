@@ -2,6 +2,7 @@
 import logging
 import os
 from pathlib import Path
+from typing import List
 
 import click
 
@@ -36,6 +37,14 @@ class Project:
                 return cwd
             path = path.parent
         return path
+
+    def get_templates(self) -> List[Path]:
+        """Get a list of all the available templates.
+
+        Returns:
+            List[Path]: A list of paths to all the templates.
+        """
+        return sorted(self.template_dir.glob("*.ipynb"))
 
 
 @click.group()

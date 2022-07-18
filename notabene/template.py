@@ -13,12 +13,8 @@ from notabene.utils import is_snake_case
 log = logging.getLogger(__name__)
 
 
-def _list_templates(template_dir: Path):
-    return sorted(template_dir.glob("*.ipynb"))
-
-
-def _echo_templates(templates: List[Path]):
-    click.secho("The available templates in this project are:", fg="cyan", bold=True)
+def _echo_templates(templates: List[Path], title: str = "The available templates are:"):
+    click.secho(title, fg="cyan", bold=True)
     for i, path in enumerate(templates):
         click.echo(f"[{i:>2}]\t{path.stem}")
 
@@ -81,7 +77,7 @@ def template(project: Project, template_dir: click.Path):
 @click.pass_obj
 def create(project: Project, name: str, notebook: str):
     """Create a new template."""
-    templates = _list_templates(project.template_dir)
+    templates = project.get_templates()
 
     if name == "":
         while True:
@@ -125,7 +121,8 @@ def create(project: Project, name: str, notebook: str):
 @click.pass_obj
 def list_command(project: Project):
     """List all of your templates."""
-    _echo_templates(_list_templates(project.template_dir))
+    templates = project.get_templates()
+    _echo_templates(templates)
 
 
 @template.command()
@@ -147,7 +144,7 @@ def use(project: Project, template: str, notebook: str):
     if notebook.exists():
         raise click.BadArgumentUsage(f"The file '{notebook}' already exists.")
 
-    templates = _list_templates(project.template_dir)
+    templates = project.get_templates()
     template_path = _select_template(templates=templates, template=template)
 
     notebook.parent.mkdir(parents=True, exist_ok=True)

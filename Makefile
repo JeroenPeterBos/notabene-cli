@@ -21,13 +21,13 @@ lint: format
 	flake8p $(PROJ_SLUG) tests
 	pylint $(PROJ_SLUG) tests
 
-test: lint
+test: format
 	pytest --cov=$(PROJ_SLUG)
 
 coverage: test
 	coverage html
 
-docs: test licenses
+docs: test lint licenses
 	sphinx-build -b html "docs" "build/docs"
 
 package: clean docs
