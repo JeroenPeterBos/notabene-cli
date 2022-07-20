@@ -122,7 +122,11 @@ def create(project: Project, name: str, notebook: str):
 def list_command(project: Project):
     """List all of your templates."""
     templates = project.get_templates()
-    _echo_templates(templates)
+    if len(templates) > 0:
+        _echo_templates(templates)
+    else:
+        click.secho("You don't have any templates yet.", fg="cyan", bold=True)
+        click.echo("Create new templates using the 'create' command.")
 
 
 @template.command()

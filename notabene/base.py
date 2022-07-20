@@ -8,6 +8,9 @@ import click
 
 from notabene.version import __version__
 
+log = logging.getLogger(__name__)
+
+
 LOGGING_LEVELS = {
     -1: logging.NOTSET,
     0: logging.ERROR,
@@ -20,13 +23,9 @@ LOGGING_LEVELS = {
 class Project:
     """Project object that is used to pass information troughout the cli."""
 
-    def __init__(self, verbose: int) -> None:
-        """Create the `Project` object to be used troughout the cli.
-
-        Args:
-            verbose (int): The verbosity level for logging messages.
-        """
-        self.verbose = verbose
+    def __init__(self, log_level: int) -> None:
+        """Create the `Project` object to be used troughout the cli."""
+        self.log_level = log_level
         self.root = self._find_project_root()
         self.template_dir = self.root / ".notabene" / "templates"
 
@@ -44,35 +43,32 @@ class Project:
         Returns:
             List[Path]: A list of paths to all the templates.
         """
-        return sorted(self.template_dir.glob("*.ipynb"))
+        templates = list(self.template_dir.glob("*.ipynb"))
+        log.info(f"Retrieved {len(templates)} templates from '{self.template_dir}'")
+        return sorted(templates)
 
 
 @click.group()
 @click.option(
-    "--verbose",
-    "-v",
-    default=-1,
-    type=int,
-    help="Enable verbose output, use 0, 1, 2, 3 for ERROR, WARN, INFO, DEBUG.",
+    "--verbose", "-v", default=False, is_flag=True, help="Enable verbose output."
+)
+@click.option(
+    "--debug", "-b", default=False, is_flag=True, help="Enable debugging output."
 )
 @click.pass_context
-def base(ctx: click.Context, verbose: int):
+def base(ctx: click.Context, verbose: bool, debug: bool):
     """Run notabene."""
-    ctx.obj = Project(verbose=verbose)
+    log_level = None
+    if verbose:
+        log_level = logging.INFO
+    if debug:
+        log_level = logging.DEBUG
 
-    if verbose >= 0:
-        logging.basicConfig(
-            level=LOGGING_LEVELS[verbose]
-            if verbose in LOGGING_LEVELS
-            else logging.DEBUG
-        )
-        click.echo(
-            click.style(
-                "Verbose logging is enabled."
-                f"(LEVEL={logging.getLogger().getEffectiveLevel()})",
-                fg="yellow",
-            )
-        )
+    if log_level is not None:
+        logging.basicConfig(level=log_level)
+        log.info("Verbose logging. (Level %s)", logging.getLevelName(log_level))
+
+    ctx.obj = Project(log_level=log_level)
 
 
 @base.command()

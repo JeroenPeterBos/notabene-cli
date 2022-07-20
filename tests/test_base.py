@@ -9,6 +9,7 @@
 This is the test module for the project's command-line interface (CLI)
 module.
 """
+import logging
 from click.testing import CliRunner, Result
 
 from notabene import __version__
@@ -24,10 +25,29 @@ def test_version_displays_library_version():
     ), "Version number should match library version."
 
 
-def test_verbose_output():
+def test_verbose_output(caplog):
     """Test the `version` subcommand with the '--verbose' option."""
+    caplog.set_level(logging.INFO)
+
     runner: CliRunner = CliRunner()
-    result: Result = runner.invoke(cli, ["--verbose", "0", "version"])
+    result: Result = runner.invoke(cli, ["--verbose", "version"])
+    logging_output = "\n".join(caplog.messages)
+
+    assert result.exit_code == 0
     assert (
-        "Verbose" in result.output.strip()
+        "Verbose" in logging_output and "INFO" in logging_output
+    ), "Verbose logging should be indicated in output."
+
+
+def test_debug_output(caplog):
+    """Test the `version` subcommand with the '--debug' option."""
+    caplog.set_level(logging.DEBUG)
+
+    runner: CliRunner = CliRunner()
+    result: Result = runner.invoke(cli, ["--debug", "version"])
+    logging_output = "\n".join(caplog.messages)
+
+    assert result.exit_code == 0
+    assert (
+        "Verbose" in logging_output and "DEBUG" in logging_output
     ), "Verbose logging should be indicated in output."

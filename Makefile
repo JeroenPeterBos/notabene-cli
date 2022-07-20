@@ -1,17 +1,22 @@
-.DEFAULT_GOAL := package
-.PHONY: install publish package coverage test lint docs
+# .DEFAULT_GOAL := package
+# .PHONY: install publish package coverage test lint docs
 PROJ_SLUG = notabene
-CLI_NAME = notabene
 PY_VERSION = 3.8
+CONDA_BASE_PATH=$$(conda info --base)
 
 
-env:
+$(CONDA_BASE_PATH)/envs/$(PROJ_SLUG)/bin/python:
 	conda create -n $(PROJ_SLUG) python=$(PY_VERSION) pip -y
 	conda run -n $(PROJ_SLUG) pip install pip-tools
+
+install: $(CONDA_BASE_PATH)/envs/$(PROJ_SLUG)/bin/python
 	conda run -n $(PROJ_SLUG) pip-sync
 
-install: 
-	pip-sync
+destroy:
+	conda remove -n $(PROJ_SLUG) --all -y 
+
+hi:
+	echo $(CONDA_BASE_PATH)/envs/$(PROJ_SLUG)/bin/python
 
 format:
 	isort .

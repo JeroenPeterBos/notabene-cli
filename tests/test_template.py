@@ -1,9 +1,9 @@
 import shutil
 from pathlib import Path
-from re import template
 
 import pytest
 from click.testing import CliRunner
+from notabene.cli import cli
 
 
 @pytest.fixture
@@ -76,7 +76,18 @@ def test_fixtures(
             assert not notebook_path.exists()
 
 
-def test_list():
+def test_list_empty(pf_empty: Path):
     runner = CliRunner()
-    with runner.isolated_filesystem():
-        pass
+    with runner.isolated_filesystem(temp_dir=pf_empty):
+        result = runner.invoke(cli, ["template", "list"])
+        assert result.exit_code == 0
+        assert "You don't have any templates yet." in result.output
+
+
+def test_list(pf_template: Path):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=pf_template):
+        result = runner.invoke(cli, ["template", "list"])
+        assert result.exit_code == 0
+        assert "The available templates are" in result.output
+        assert "exploratory_data_analysis" in result.output
