@@ -62,7 +62,7 @@ def _select_template(templates: List[Path], template: str):
 def template(project: Project, template_dir: click.Path):
     """Use, check and create templates."""
     if template_dir is not None:
-        project.template_dir = template_dir
+        project.template_dir = Path(template_dir)
 
 
 @template.command()
@@ -103,7 +103,7 @@ def create(project: Project, name: str, notebook: str):
         # Select one of the notabene templates
         # https://stackoverflow.com/questions/6028000/how-to-read-a-static-file-from-inside-a-python-package
         # Implement this later
-        pass
+        pass  # pragma: no cover
     elif not Path(notebook).with_suffix(".ipynb").exists():
         abs_path = Path(notebook).with_suffix(".ipynb").resolve()
         raise click.BadArgumentUsage(f"The notebook '{abs_path}' does not exist.")

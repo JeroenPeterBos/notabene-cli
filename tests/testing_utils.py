@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Iterator
 
 import click.testing
+import pytest
 
 
 class CliRunner(click.testing.CliRunner):
@@ -27,3 +28,10 @@ class CliRunner(click.testing.CliRunner):
             yield self
         finally:
             os.chdir(cwd)
+
+
+@pytest.fixture
+def pf_data_path(request):
+    """Fixture that resolves the path to the test data directory."""
+    test_file = Path(request.module.__file__)
+    return test_file.parent / "data" / test_file.stem

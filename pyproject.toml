@@ -31,6 +31,13 @@ branch = true
 
 [tool.coverage.report]
 fail_under = 95
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "break"
+]
 
 [tool.coverage.html]
 directory = "build/coverage"
@@ -50,7 +57,7 @@ extend-ignore = [
     "E203",
 ]
 per-file-ignores = [
-    "tests/*:F811"
+    "tests/*:F811,F401"
 ]
 
 [tool.pylint.main]
@@ -78,6 +85,7 @@ disable = [
 [tool.black]
 line-length = 88
 target-version = ["py38"]
+extend-exclude = ".*\\.ipynb"
 
 [tool.isort]
 profile = "black"

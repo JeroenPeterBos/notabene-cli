@@ -19,14 +19,7 @@ from click.testing import Result
 from notabene import __version__
 from notabene.base import Project
 from notabene.cli import cli
-from tests.testing_utils import CliRunner
-
-
-@pytest.fixture
-def pf_data_path(request):
-    """Fixture that resolves the path to the test data directory."""
-    test_file = Path(request.module.__file__)
-    return test_file.parent / "data" / test_file.stem
+from tests.testing_utils import CliRunner, pf_data_path  # pylint: disable=unused-import
 
 
 @pytest.fixture

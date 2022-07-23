@@ -6,16 +6,9 @@ import pytest
 
 from notabene.base import Project
 from notabene.cli import cli
-from tests.testing_utils import CliRunner
+from tests.testing_utils import CliRunner, pf_data_path  # pylint: disable=unused-import
 
 # pylint: disable=unused-argument
-
-
-@pytest.fixture
-def pf_data_path(request):
-    """Fixture that resolves the path to the test data directory."""
-    test_file = Path(request.module.__file__)
-    return test_file.parent / "data" / test_file.stem
 
 
 @pytest.fixture
@@ -107,6 +100,16 @@ class TestList:
             assert result.exit_code == 0
             assert "You don't have any templates yet." in result.output
 
+    def test_list_modified_template_path(self, pf_notebook: Path):
+        """Test listing templates and modifying the template directory."""
+        with CliRunner().enter_fixture(path=pf_notebook) as runner:
+            result = runner.invoke(
+                cli, ["template", "--template-dir", "notebooks", "list"]
+            )
+
+            assert result.exit_code == 0
+            assert "test_eda" in result.output
+
 
 class TestCreate:
     """Tests related to the 'create' command."""
@@ -148,3 +151,86 @@ class TestCreate:
             )
 
             assert result.exit_code == 0
+
+    def test_missing_notebook(self, pf_empty: Path):
+        """Test create a new template with missing notebook."""
+        with CliRunner().enter_fixture(path=pf_empty) as runner:
+            result = runner.invoke(
+                cli,
+                [
+                    "template",
+                    "create",
+                    "--name",
+                    "exploratory_data_analysis",
+                    "notebooks/test_eda.ipynb",
+                ],
+            )
+
+            assert result.exit_code == 2
+
+    def test_existing_template(self, pf_template_notebook: Path):
+        """Test create a new template with missing notebook."""
+        with CliRunner().enter_fixture(path=pf_template_notebook) as runner:
+            result = runner.invoke(
+                cli,
+                [
+                    "template",
+                    "create",
+                    "--name",
+                    "exploratory_data_analysis",
+                    "notebooks/test_eda.ipynb",
+                ],
+            )
+
+            assert result.exit_code == 2
+
+
+class TestUse:
+    """Test the 'use' command."""
+
+    @pytest.mark.parametrize("selection", ["0", "1\n0"])
+    def test_use_basic(self, pf_template_notebook: Path, selection: str):
+        """Test create a new notebook using the template."""
+        with CliRunner().enter_fixture(pf_template_notebook / "notebooks") as runner:
+            initial_no_notebooks = len(list(Path().cwd().glob("*.ipynb")))
+            result = runner.invoke(
+                cli, ["template", "use", "new_notebook"], input=selection
+            )
+
+            assert result.exit_code == 0
+            assert len(list(Path().cwd().glob("*.ipynb"))) == initial_no_notebooks + 1
+
+    @pytest.mark.parametrize("selection", ["0", "exploratory_data_analysis"])
+    def test_option_template(self, pf_template_notebook: Path, selection: str):
+        """Test create a new notebook using template with template option."""
+        with CliRunner().enter_fixture(pf_template_notebook / "notebooks") as runner:
+            initial_no_notebooks = len(list(Path().cwd().glob("*.ipynb")))
+            result = runner.invoke(
+                cli, ["template", "use", "--template", selection, "new_notebook"]
+            )
+
+            assert result.exit_code == 0
+            assert len(list(Path().cwd().glob("*.ipynb"))) == initial_no_notebooks + 1
+
+    @pytest.mark.parametrize("selection", ["1", "eda"])
+    def test_option_template_not_exist(
+        self, pf_template_notebook: Path, selection: str
+    ):
+        """Test failing create a new notebook using template option."""
+        with CliRunner().enter_fixture(pf_template_notebook / "notebooks") as runner:
+            initial_no_notebooks = len(list(Path().cwd().glob("*.ipynb")))
+            result = runner.invoke(
+                cli, ["template", "use", "--template", selection, "new_notebook"]
+            )
+
+            assert result.exit_code == 2
+            assert len(list(Path().cwd().glob("*.ipynb"))) == initial_no_notebooks
+
+    def test_notebook_already_exists(self, pf_template_notebook: Path):
+        """Test failing create new notebook as it already exists."""
+        with CliRunner().enter_fixture(pf_template_notebook / "notebooks") as runner:
+            result = runner.invoke(
+                cli, ["template", "use", "--template", "0", "test_eda"]
+            )
+
+            assert result.exit_code == 2
