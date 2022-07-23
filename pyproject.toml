@@ -15,14 +15,16 @@ filterwarnings = [
 legacy_tox_ini = """
 [tox]
 requires = tox-conda
-envlist = py{36,37,38}-click{7,8}
+envlist = py36-click{70,7latest,80},py{37,38}-click{70,7latest,80,8latest}
 
 [testenv]
 deps =
     pytest
     pytest-cov
-    click7: click==7
-    click8: click==8
+    click70: click==7.0
+    click7latest: click>=7.1,<8
+    click80: click==8.0
+    click8latest: click>=8.1
 commands =
     pytest
 """

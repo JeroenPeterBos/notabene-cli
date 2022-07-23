@@ -9,7 +9,6 @@ This file is used to create the package we'll publish to PyPI.
 """
 
 import importlib.util
-from codecs import open  # Use a consistent encoding.
 from os import path
 from pathlib import Path
 
@@ -20,6 +19,9 @@ here = path.abspath(path.dirname(__file__))
 # Get the long description from the relevant file
 with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
+
+with open(path.join(here, "requirements.in"), encoding="utf-8") as f:
+    requirements = f.read().split("# DEVELOPMENT REQUIREMENTS")[0].split("\n")
 
 
 # Get the base version from the library.  (We'll find it in the `version.py`
@@ -37,7 +39,7 @@ setup(
     long_description=long_description,
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     version=version,
-    install_requires=["click"],
+    install_requires=requirements,
     entry_points="""
     [console_scripts]
     notabene=notabene.cli:cli

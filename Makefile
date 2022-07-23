@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: install destroy format lint test coverage licenses docs package publish clean
+.PHONY: install destroy format lint test tox coverage licenses docs package publish clean
 PROJ_SLUG = notabene
 PY_VERSION = 3.8
 CONDA_BASE_PATH=$$(conda info --base)
@@ -26,6 +26,9 @@ lint: format  ## Apply the linters to the project
 test: format  ## Run all the tests
 	pytest --cov=$(PROJ_SLUG) --cov-fail-under=0
 
+tox:  ## Run all test in several environments with varying dependency versions
+	tox -p
+
 coverage: test  ## Generate an HTML coverage report
 	coverage html
 
@@ -33,12 +36,11 @@ licenses: docs/licenses.rst  ## Generate licenses from the dependencies
 docs/licenses.rst:
 	pip-licenses --with-url --format=rst --output-file docs/licenses.rst
 
-docs: test lint docs/licenses.rst  ## Generate the documentation
+docs: lint docs/licenses.rst  ## Generate the documentation
 	sphinx-build -b html "docs" "build/docs"
 
-package: clean docs  ## Package this project / create the distributable
+package: clean docs ## tox  ## Package this project / create the distributable
 	python setup.py sdist --dist-dir build/dist
-	rm -rf *.egg-info
 
 publish: package  ## Publish this package to PyPI using twine
 	twine upload -r testpypi build/dist/*

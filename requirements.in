@@ -1,4 +1,4 @@
-click
+click>=7
 
 # DEVELOPMENT REQUIREMENTS
 
@@ -16,3 +16,4 @@ Sphinx
 tox
 tox-conda
 twine
+ipykernel
