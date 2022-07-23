@@ -77,6 +77,7 @@ def template(project: Project, template_dir: click.Path):
 @click.pass_obj
 def create(project: Project, name: str, notebook: str):
     """Create a new template."""
+    click.secho("Creating new template...", fg="cyan", bold=True)
     templates = project.get_templates()
 
     if name == "":
@@ -85,8 +86,7 @@ def create(project: Project, name: str, notebook: str):
             if is_snake_case(name):
                 if name not in [t.stem for t in templates]:
                     break
-                else:
-                    click.echo(f"Error: The template '{name}' already exists.")
+                click.echo(f"Error: The template '{name}' already exists.")
             else:
                 click.echo(
                     "Error: The name of the template should be snake case. "
@@ -105,12 +105,12 @@ def create(project: Project, name: str, notebook: str):
         # Implement this later
         pass
     elif not Path(notebook).with_suffix(".ipynb").exists():
-        raise click.BadArgumentUsage(
-            f"The notebook '{Path(notebook).with_suffix('.ipynb')}' does not exist."
-        )
+        abs_path = Path(notebook).with_suffix(".ipynb").resolve()
+        raise click.BadArgumentUsage(f"The notebook '{abs_path}' does not exist.")
     else:
         notebook = Path(notebook).with_suffix(".ipynb")
 
+    template_path.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy(notebook, template_path)
     click.secho(
         f"Created template '{name}' using notebook '{notebook}'.", fg="cyan", bold=True

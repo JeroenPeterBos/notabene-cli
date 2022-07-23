@@ -23,7 +23,7 @@ LOGGING_LEVELS = {
 class Project:
     """Project object that is used to pass information troughout the cli."""
 
-    def __init__(self, log_level: int) -> None:
+    def __init__(self, log_level: int = logging.ERROR) -> None:
         """Create the `Project` object to be used troughout the cli."""
         self.log_level = log_level
         self.root = self._find_project_root()
@@ -44,7 +44,7 @@ class Project:
             List[Path]: A list of paths to all the templates.
         """
         templates = list(self.template_dir.glob("*.ipynb"))
-        log.info(f"Retrieved {len(templates)} templates from '{self.template_dir}'")
+        log.info("Retrieved %s templates from '%s'", len(templates), self.template_dir)
         return sorted(templates)
 
 

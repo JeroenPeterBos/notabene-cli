@@ -49,6 +49,9 @@ max-line-length = 88
 extend-ignore = [
     "E203",
 ]
+per-file-ignores = [
+    "tests/*:F811"
+]
 
 [tool.pylint.main]
 jobs = 0
