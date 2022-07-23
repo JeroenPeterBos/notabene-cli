@@ -3,14 +3,25 @@ name: NotaBene Pipeline
 on: [push]
 
 jobs:
-  build:
+  code-quality:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
 
     steps:
       - uses: actions/checkout@v3
       - uses: conda-incubator/setup-miniconda@v2
         with:
-          python-version: "3.8"
-      - name: Check Formatting
+          activate-environment: notabene
+          python-version: 3.8
+      - name: Install Requirements
+        run: |
+          pip install pip-tools
+          pip-sync
+      - name: Black Check
         run:
-          conda info
+          black . --check
+      - name: Imports Check
+        run:
+          isort . --check-only
