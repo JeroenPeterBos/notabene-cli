@@ -21,15 +21,6 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
-# Get the requirements from the requirements.in file
-with open(path.join(here, "requirements.in"), encoding="utf-8") as f:
-    requirements = []
-    for line in f.readlines():
-        if line.startswith("# DEVELOPMENT REQUIREMENTS"):
-            break
-
-        if line != "" and not line.isspace():
-            requirements.append(line.strip())
 
 # Get the base version from the library.  (We'll find it in the `version.py`
 # file in the src directory, but we'll bypass actually loading up the library.)
@@ -46,7 +37,7 @@ setup(
     long_description=long_description,
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     version=version,
-    install_requires=requirements,
+    install_requires=["click"],
     entry_points="""
     [console_scripts]
     notabene=notabene.cli:cli
