@@ -6,7 +6,7 @@ on:
 env:
   PROJ_SLUG: notabene
   # Increase this value to invalidate cache on the cicd pipelines
-  CACHE_NUMBER: 1
+  CACHE_NUMBER: 2
 
 
 jobs:
@@ -34,9 +34,6 @@ jobs:
         run:
           pip install pip-tools
       - name: Install Requirements
-        run:
-          pip-sync requirements.txt
-      - name: Install Requirements 2
         run:
           pip-sync requirements.txt
       - name: Formatting check using Black
@@ -70,19 +67,13 @@ jobs:
         with:
           activate-environment: notabene
           python-version: 3.8
-      - name: Cache env
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.CONDA }}/envs
-          key: conda-${{ runner.os }}--${{ runner.arch }}-${{ hashFiles('requirements.txt') }}-${{ env.CACHE_NUMBER }}
-        id: cache
       - name: Setup Environment
         run:
           pip install pip-tools
       - name: Install Requirements
         run:
           pip-sync requirements.txt
-      - name:
+      - name: Run tox to test grid of dependencies
         run:
           tox -p
         env:
