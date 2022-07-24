@@ -2,6 +2,9 @@ name: NotaBene Pipeline
 
 on: [push]
 
+env:
+  PROJ_SLUG: notabene
+
 jobs:
   code-quality:
     runs-on: ubuntu-latest
@@ -19,9 +22,18 @@ jobs:
         run: |
           pip install pip-tools
           pip-sync
-      - name: Black Check
+      - name: Formatting check using Black
         run:
           black . --check
-      - name: Imports Check
+      - name: Formatting check using ISort
         run:
           isort . --check-only
+      - name: Linting check using Flake8
+        run:
+          flake8p $PROJ_SLUG tests
+      - name: Linting check using PyLint
+        run:
+          pylint $PROJ_SLUG tests
+      - name: Run all tests and coverage check
+        run:
+          pytest --cov=$PROJ_SLUG

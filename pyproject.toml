@@ -53,7 +53,8 @@ exclude = [
     ".vscode",
     ".pytest_cache", 
     "__pycache__", 
-    "build"
+    "build",
+    "docs/conf.py"
 ]
 statistics = true
 max-line-length = 88
