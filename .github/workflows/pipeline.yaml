@@ -21,9 +21,11 @@ jobs:
         with:
           activate-environment: notabene
           python-version: 3.8
-      - name: Install Requirements
-        run: |
+      - name: Setup Environment
+        run:
           pip install pip-tools
+      - name: Install Requirements
+        run:
           pip-sync
       - name: Formatting check using Black
         run:
@@ -58,9 +60,11 @@ jobs:
         with:
           activate-environment: notabene
           python-version: 3.8
-      - name: Install Requirements
-        run: |
+      - name: Setup Environment
+        run:
           pip install pip-tools
+      - name: Install Requirements
+        run:
           pip-sync
       - name:
         run:

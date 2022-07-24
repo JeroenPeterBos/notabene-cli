@@ -277,6 +277,8 @@ wcwidth==0.2.5
     # via prompt-toolkit
 webencodings==0.5.1
     # via bleach
+wincertstore==0.2
+    # via -r requirements.in
 wrapt==1.14.1
     # via astroid
 zipp==3.8.1
