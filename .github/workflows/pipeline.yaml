@@ -11,9 +11,12 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
-
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+          cache: 'pip'
       - uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: notabene
@@ -37,3 +40,28 @@ jobs:
       - name: Run all tests and coverage check
         run:
           pytest --cov=$PROJ_SLUG
+  platform-validation:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+          cache: 'pip'
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: notabene
+          python-version: 3.8
+      - name: Install Requirements
+        run: |
+          pip install pip-tools
+          pip-sync
+      - name:
+        run:
+          tox -p
