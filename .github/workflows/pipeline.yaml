@@ -33,6 +33,9 @@ jobs:
       - name: Install Requirements
         run:
           pip-sync requirements.txt
+      - name: Install Requirements 2
+        run:
+          pip-sync requirements.txt
       - name: Formatting check using Black
         run:
           black . --check
@@ -50,7 +53,7 @@ jobs:
           pytest --cov=$PROJ_SLUG
   multi-platform-dependency-test:
     needs: code-quality
-#    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
