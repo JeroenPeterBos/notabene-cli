@@ -22,10 +22,9 @@ deps =
     pytest
     pytest-cov
     click70: click==7.0
-    click7latest: click>=7.1
-    click7latest: click<8
+    click7latest: click==7
     click80: click==8.0
-    click8latest: click>=8.1
+    click8latest: click
 commands =
     pytest
 """
