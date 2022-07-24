@@ -1,0 +1,80 @@
+name: NotaBene Pipeline
+
+on:
+  push
+
+env:
+  PROJ_SLUG: notabene
+  # Increase this value to invalidate cache on the cicd pipelines
+  CACHE_NUMBER: 2
+
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: notabene
+          python-version: 3.8
+      - name: Get Conda Path
+        id: get-path
+        run: echo "::set-output name=condapath::$(echo $CONDA_PREFIX)"
+      - name: Cache env
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.get-path.outputs.condapath }}
+          key: conda-${{ runner.os }}--${{ runner.arch }}-${{ hashFiles('requirements.txt') }}-${{ env.CACHE_NUMBER }}
+        id: cache
+      - name: Setup Environment
+        run:
+          pip install pip-tools
+      - name: Install Requirements
+        run:
+          pip-sync requirements.txt
+      - name: Formatting check using Black
+        run:
+          black . --check
+      - name: Formatting check using ISort
+        run:
+          isort . --check-only
+      - name: Linting check using Flake8
+        run:
+          flake8p $PROJ_SLUG tests
+      - name: Linting check using PyLint
+        run:
+          pylint $PROJ_SLUG tests
+      - name: Run all tests and coverage check
+        run:
+          pytest --cov=$PROJ_SLUG
+  multi-platform-dependency-test:
+    needs: code-quality
+    if: github.ref == 'refs/heads/master'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: notabene
+          python-version: 3.8
+      - name: Setup Environment
+        run:
+          pip install pip-tools
+      - name: Install Requirements
+        run:
+          pip-sync requirements.txt
+      - name: Run tox to test grid of dependencies
+        run:
+          tox -p
+        env:
+          TOX_PARALLEL_NO_SPINNER: 1

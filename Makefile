@@ -39,7 +39,7 @@ docs/licenses.rst:
 docs: lint docs/licenses.rst  ## Generate the documentation
 	sphinx-build -b html "docs" "build/docs"
 
-package: clean docs ## tox  ## Package this project / create the distributable
+package: clean docs tox  ## Package this project / create the distributable
 	python setup.py sdist --dist-dir build/dist
 
 publish: package  ## Publish this package to PyPI using twine
