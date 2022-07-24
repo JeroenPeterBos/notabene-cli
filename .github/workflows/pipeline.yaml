@@ -43,6 +43,7 @@ jobs:
         run:
           pytest --cov=$PROJ_SLUG
   platform-validation:
+    needs: code-quality
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -68,4 +69,4 @@ jobs:
           pip-sync
       - name:
         run:
-          tox -p
+          tox
