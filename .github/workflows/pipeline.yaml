@@ -42,10 +42,11 @@ jobs:
       - name: Run all tests and coverage check
         run:
           pytest --cov=$PROJ_SLUG
-  platform-validation:
+  multi-platform-dependency-test:
     needs: code-quality
     runs-on: ${{ matrix.os }}
     strategy:
+      max-parallel: 1
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     defaults:
