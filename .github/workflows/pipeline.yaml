@@ -21,10 +21,13 @@ jobs:
         with:
           activate-environment: notabene
           python-version: 3.8
+      - name: Get Conda Path
+        id: get-path
+        run: echo "::set-output name=condapath::$(echo $CONDA_PREFIX)"
       - name: Cache env
         uses: actions/cache@v2
         with:
-          path: ${{ env.CONDA }}/envs
+          path: ${{ steps.get-path.outputs.condapath }}
           key: conda-${{ runner.os }}--${{ runner.arch }}-${{ hashFiles('requirements.txt') }}-${{ env.CACHE_NUMBER }}
         id: cache
       - name: Setup Environment
