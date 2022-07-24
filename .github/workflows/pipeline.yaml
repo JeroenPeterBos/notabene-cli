@@ -5,6 +5,8 @@ on:
 
 env:
   PROJ_SLUG: notabene
+  # Increase this value to invalidate cache on the cicd pipelines
+  CACHE_NUMBER: 1
 
 
 jobs:
@@ -24,9 +26,6 @@ jobs:
         with:
           path: ${{ env.CONDA }}/envs
           key: conda-${{ runner.os }}--${{ runner.arch }}-${{ hashFiles('requirements.txt') }}-${{ env.CACHE_NUMBER }}
-        env:
-          # Increase this value to reset cache if etc/example-environment.yml has not changed
-          CACHE_NUMBER: 1
         id: cache
       - name: Setup Environment
         run:
@@ -51,7 +50,7 @@ jobs:
           pytest --cov=$PROJ_SLUG
   multi-platform-dependency-test:
     needs: code-quality
-    if: github.ref == 'refs/heads/master'
+#    if: github.ref == 'refs/heads/master'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -61,20 +60,22 @@ jobs:
         shell: bash -l {0}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.8'
-          cache: 'pip'
       - uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: notabene
           python-version: 3.8
+      - name: Cache env
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.CONDA }}/envs
+          key: conda-${{ runner.os }}--${{ runner.arch }}-${{ hashFiles('requirements.txt') }}-${{ env.CACHE_NUMBER }}
+        id: cache
       - name: Setup Environment
         run:
           pip install pip-tools
       - name: Install Requirements
         run:
-          pip-sync
+          pip-sync requirements.txt
       - name:
         run:
           tox -p
