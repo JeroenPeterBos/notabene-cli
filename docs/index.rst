@@ -2,7 +2,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-notabene-cli
+Notabene
 ============
 
 The command line interface for interacting with notabene.
@@ -12,8 +12,8 @@ The command line interface for interacting with notabene.
    :caption: Contents:
 
    getting_started
-   api
-   development
+   cli
+   contributing
    requirements
 
 

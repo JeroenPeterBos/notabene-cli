@@ -1,7 +1,7 @@
-.. _development:
+.. _contributing:
 
-Development
-===========
+Contributing
+============
 
 .. toctree::
    :maxdepth: 1
