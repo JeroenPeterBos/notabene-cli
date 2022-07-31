@@ -36,7 +36,7 @@ licenses: docs/licenses.rst  ## Generate licenses from the dependencies
 docs/licenses.rst:
 	pip-licenses --with-url --format=rst --output-file docs/licenses.rst
 
-docs: lint docs/licenses.rst  ## Generate the documentation
+docs: clean lint docs/licenses.rst  ## Generate the documentation
 	sphinx-build -b html "docs" "build/docs"
 
 package: clean docs tox  ## Package this project / create the distributable
