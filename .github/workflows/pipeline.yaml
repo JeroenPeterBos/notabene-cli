@@ -58,7 +58,6 @@ jobs:
           pytest --cov=$PROJ_SLUG
   multi-platform-dependency-test:
     needs: code-quality
-    if: github.ref == 'refs/heads/main'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
