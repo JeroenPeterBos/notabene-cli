@@ -15,7 +15,9 @@ filterwarnings = [
 legacy_tox_ini = """
 [tox]
 requires = tox-conda
-envlist = py36-click{70,7latest,80},py{37,38}-click{70,7latest,80,8latest}
+envlist =
+    py36-click{70,7latest,80}
+    py{37,38}-click{70,7latest,80,8latest}
 
 [testenv]
 deps =

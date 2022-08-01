@@ -1,7 +1,12 @@
 name: NotaBene Pipeline
 
 on:
-  push
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
 
 env:
   PROJ_SLUG: notabene
@@ -53,7 +58,6 @@ jobs:
           pytest --cov=$PROJ_SLUG
   multi-platform-dependency-test:
     needs: code-quality
-    if: github.ref == 'refs/heads/main'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -67,6 +71,15 @@ jobs:
         with:
           activate-environment: notabene
           python-version: 3.8
+      - name: Get Conda Path
+        id: get-path
+        run: echo "::set-output name=condapath::$(echo $CONDA_PREFIX)"
+      - name: Cache env
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.get-path.outputs.condapath }}
+          key: conda-${{ runner.os }}--${{ runner.arch }}-${{ hashFiles('requirements.txt') }}-${{ env.CACHE_NUMBER }}
+        id: cache
       - name: Setup Environment
         run:
           pip install pip-tools
