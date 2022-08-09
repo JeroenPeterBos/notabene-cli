@@ -9,7 +9,7 @@ on:
 
 env:
   # Increase this value to invalidate cache on this CI/CD pipeline
-  CACHE_NUMBER: 3
+  CACHE_NUMBER: 4
 
 
 jobs:
