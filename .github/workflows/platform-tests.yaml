@@ -14,7 +14,7 @@ env:
 
 
 jobs:
-  multi-platform-dependency-test:
+  platform-test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
