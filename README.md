@@ -4,7 +4,7 @@
 ![Platform Tests](https://github.com/JeroenPeterBos/notabene-cli/actions/workflows/platform-tests.yaml/badge.svg)
 
 <p align="center">
-    <img width="50%" src="docs/_static/images/logo_wide.svg">
+    <img width="60%" src="docs/_static/images/logo_wide.svg">
 </p>
 
 Bring best practices from software engineering to your jupyter notebooks using [NotaBene](https://github.com/JeroenPeterBos/notabene-cli).
