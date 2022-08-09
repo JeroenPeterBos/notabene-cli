@@ -10,7 +10,7 @@ on:
 
 env:
   PROJ_SLUG: notabene
-  # Increase this value to invalidate cache on the cicd pipelines
+  # Increase this value to invalidate cache on this CI/CD pipeline
   CACHE_NUMBER: 2
 
 
@@ -61,7 +61,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: 
+          - ubuntu-latest
+#          - macos-latest
+#          - windows-latest
     defaults:
       run:
         shell: bash -l {0}

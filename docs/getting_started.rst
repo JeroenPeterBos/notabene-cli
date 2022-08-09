@@ -10,11 +10,11 @@ Getting Started
 Installing the Library
 ======================
 
-You can use pip to install `notabene`.
+You can use pip to install `notabene-cli`.
 
 .. code-block:: sh
 
-    pip install notabene
+    pip install notabene-cli
 
 
 

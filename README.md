@@ -21,7 +21,9 @@ The project's documentation contains a section to help you
 
 Install [NotaBene](https://github.com/JeroenPeterBos/notabene-cli) using:
 
-
+```
+pip install notabene-cli
+```
 
 ## Development Prerequisites
 
