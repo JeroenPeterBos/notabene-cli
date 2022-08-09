@@ -56,27 +56,27 @@ jobs:
       - name: Run all tests and coverage check
         run:
           pytest --cov=$PROJ_SLUG
-  multi-platform-dependency-test:
-    needs: code-quality
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: 
-          - ubuntu-latest
-#          - macos-latest
-#          - windows-latest
-    defaults:
-      run:
-        shell: bash -l {0}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: conda-incubator/setup-miniconda@v2
-        with:
-          activate-environment: notabene
-          python-version: 3.8
-      - name: Get Conda Path
-        id: get-path
-        run: echo "::set-output name=condapath::$(echo $CONDA_PREFIX)"
+#   multi-platform-dependency-test:
+#     needs: code-quality
+#     runs-on: ${{ matrix.os }}
+#     strategy:
+#       matrix:
+#         os: 
+#           - ubuntu-latest
+# #          - macos-latest
+# #          - windows-latest
+#     defaults:
+#       run:
+#         shell: bash -l {0}
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: conda-incubator/setup-miniconda@v2
+#         with:
+#           activate-environment: notabene
+#           python-version: 3.8
+#       - name: Get Conda Path
+#         id: get-path
+#         run: echo "::set-output name=condapath::$(echo $CONDA_PREFIX)"
       # - name: Cache env
       #   uses: actions/cache@v2
       #   with:
