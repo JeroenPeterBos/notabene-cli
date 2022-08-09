@@ -2,15 +2,29 @@
 [![Read the Docs](https://readthedocs.org/projects/notabene-cli/badge/?version=latest)](https://notabene-cli.readthedocs.io/en/latest/?badge=latest)
 ![Code Quality](https://github.com/JeroenPeterBos/notabene-cli/actions/workflows/code-quality.yaml/badge.svg)
 ![Platform Tests](https://github.com/JeroenPeterBos/notabene-cli/actions/workflows/platform-tests.yaml/badge.svg)
+![Python Versions](https://img.shields.io/pypi/pyversions/notabene-cli)
+![PyPI](https://img.shields.io/pypi/v/notabene-cli)
 
 <p align="center">
-    <img width="60%" src="docs/_static/images/logo_wide.svg">
+    <img width="60%" src="https://raw.githubusercontent.com/JeroenPeterBos/notabene-cli/main/docs/_static/images/logo_wide.svg">
+
 </p>
 
-Bring best practices from software engineering to your jupyter notebooks using [NotaBene](https://github.com/JeroenPeterBos/notabene-cli).
+<p align="center">
 
+Bring best practices from software engineering to your jupyter notebooks using [NotaBene](https://github.com/JeroenPeterBos/notabene-cli). 
+
+</p>
+
+Knowledge is best transfered when its presentation is familiar. Notabene enables you to standardize and simplify knowledge transfer on data insights.
+
+* Code Base: https://github.com/JeroenPeterBos/notabene-cli
 * Documentation: https://notabene-cli.readthedocs.io
-* Website: https://notabene.cloud
+
+## Features
+
+* Notebook Templates
+    * Create and use your own library of notebook templates
 
 ## Getting Started
 
@@ -24,6 +38,8 @@ Install [NotaBene](https://github.com/JeroenPeterBos/notabene-cli) using:
 ```
 pip install notabene-cli
 ```
+
+For more information on how to get started **[visit the documentation](https://notabene-cli.readthedocs.io/en/latest)**.
 
 ## Development Prerequisites
 

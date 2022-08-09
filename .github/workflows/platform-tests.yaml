@@ -1,11 +1,10 @@
 name: Platform Tests
 
 on:
-  workflow_run:
-    workflows:
-      - Code Quality
-    types:
-      - completed
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 
 env:
@@ -14,7 +13,7 @@ env:
 
 
 jobs:
-  multi-platform-dependency-test:
+  platform-test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -31,15 +30,6 @@ jobs:
         with:
           activate-environment: notabene
           python-version: 3.8
-      - name: Get Conda Path
-        id: get-path
-        run: echo "::set-output name=condapath::$(echo $CONDA_PREFIX)"
-      - name: Cache env
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.get-path.outputs.condapath }}
-          key: conda-pt-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('requirements.txt') }}-${{ env.CACHE_NUMBER }}
-        id: cache
       - name: Setup Environment
         run:
           pip install pip-tools

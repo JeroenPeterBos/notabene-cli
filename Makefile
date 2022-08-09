@@ -42,8 +42,11 @@ docs: clean lint docs/licenses.rst  ## Generate the documentation
 package: clean docs tox  ## Package this project / create the distributable
 	python setup.py sdist --dist-dir build/dist
 
-publish: package  ## Publish this package to PyPI using twine
+publish-test: package  ## Test publishing this package to PyPI using twine
 	twine upload -r testpypi build/dist/*
+
+publish: package  ## Publish this package to PyPI using twine
+	twine upload build/dist/*
 
 clean:  ## Clean the project by deleting temporary files and caches
 	rm -rf build

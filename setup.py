@@ -34,9 +34,10 @@ vspec.loader.exec_module(vmod)
 version = getattr(vmod, "__version__")
 
 setup(
-    name="notabene",
+    name="notabene-cli",
     description="The command line interface for interacting with notabene.",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     version=version,
     install_requires=requirements,
