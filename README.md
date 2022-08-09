@@ -1,37 +1,35 @@
-# notabene
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Read the Docs](https://readthedocs.org/projects/notabene-cli/badge/?version=latest)](https://notabene-cli.readthedocs.io/en/latest/?badge=latest)
+![Code Quality](https://github.com/JeroenPeterBos/notabene-cli/actions/workflows/code-quality.yaml/badge.svg)
+![Platform Tests](https://github.com/JeroenPeterBos/notabene-cli/actions/workflows/platform-tests.yaml/badge.svg)
 
-The command line interface for interacting with notabene.
+<p align="center">
+    <img width="60%" src="docs/_static/images/logo_wide.svg">
+</p>
 
-## Project Features
+Bring best practices from software engineering to your jupyter notebooks using [NotaBene](https://github.com/JeroenPeterBos/notabene-cli).
 
-* [notabene](http://notabene-cli.readthedocs.io/)
-* a starter [Click](http://click.pocoo.org/5/) command-line application
-* automated unit tests you can run with [pytest](https://docs.pytest.org/en/latest/)
-* a [Sphinx](http://www.sphinx-doc.org/en/master/) documentation project
+* Documentation: https://notabene-cli.readthedocs.io
+* Website: https://notabene.cloud
 
 ## Getting Started
 
 The project's documentation contains a section to help you
-[get started](https://notabene-cli.readthedocs.io/en/latest/getting_started.html) as a developer or
-user of the library.
+[get started](https://notabene-cli.readthedocs.io/en/latest/getting_started.html).
+
+### Installation
+
+Install [NotaBene](https://github.com/JeroenPeterBos/notabene-cli) using:
+
+```
+pip install notabene-cli
+```
 
 ## Development Prerequisites
 
 If you're going to be working in the code (rather than just using the library), you'll want a few utilities.
 
 * [GNU Make](https://www.gnu.org/software/make/)
-* [Pandoc](https://pandoc.org/)
-
-## Resources
-
-Below are some handy resource links.
-
-* [Project Documentation](http://notabene-cli.readthedocs.io/)
-* [Click](http://click.pocoo.org/5/) is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.
-* [Sphinx](http://www.sphinx-doc.org/en/master/) is a tool that makes it easy to create intelligent and beautiful documentation, written by Geog Brandl and licnsed under the BSD license.
-* [pytest](https://docs.pytest.org/en/latest/) helps you write better programs.
-* [GNU Make](https://www.gnu.org/software/make/) is a tool which controls the generation of executables and other non-source files of a program from the program's source files.
-
 
 ## Authors
 
