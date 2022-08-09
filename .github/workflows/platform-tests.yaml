@@ -1,0 +1,13 @@
+name: Platform Tests
+
+on:
+  workflow_run:
+    workflows: ["Code Quality"]
+    types: [completed]
+
+jobs:
+  on-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - run: echo "First workflow was a success"

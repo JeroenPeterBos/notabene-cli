@@ -1,7 +1,10 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Read the Docs](https://readthedocs.org/projects/notabene-cli/badge/?version=latest)](https://notabene-cli.readthedocs.io/en/latest/?badge=latest)
+![Code Quality](https://github.com/JeroenPeterBos/notabene-cli/actions/workflows/code-quality.yaml/badge.svg)
+![Platform Tests](https://github.com/JeroenPeterBos/notabene-cli/actions/workflows/platform-tests.yaml/badge.svg)
 
 <p align="center">
-    <img src="docs/_static/images/logo_wide.svg">
+    <img width="50%" src="docs/_static/images/logo_wide.svg">
 </p>
 
 Bring best practices from software engineering to your jupyter notebooks using [NotaBene](https://github.com/JeroenPeterBos/notabene-cli).

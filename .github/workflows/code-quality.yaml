@@ -1,4 +1,4 @@
-name: NotaBene Pipeline
+name: Code Quality
 
 on:
   pull_request:
