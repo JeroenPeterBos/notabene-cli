@@ -2,6 +2,8 @@
 [![Read the Docs](https://readthedocs.org/projects/notabene-cli/badge/?version=latest)](https://notabene-cli.readthedocs.io/en/latest/?badge=latest)
 ![Code Quality](https://github.com/JeroenPeterBos/notabene-cli/actions/workflows/code-quality.yaml/badge.svg)
 ![Platform Tests](https://github.com/JeroenPeterBos/notabene-cli/actions/workflows/platform-tests.yaml/badge.svg)
+![Python Versions](https://img.shields.io/pypi/pyversions/notabene-cli)
+![PyPI](https://img.shields.io/pypi/v/notabene-cli)
 
 <p align="center">
     <img width="60%" src="https://raw.githubusercontent.com/JeroenPeterBos/notabene-cli/main/docs/_static/images/logo_wide.svg">

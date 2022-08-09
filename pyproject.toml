@@ -16,7 +16,6 @@ legacy_tox_ini = """
 [tox]
 requires = tox-conda
 envlist =
-    py36-click7latest
     py{37,38}-click{70,7latest,80,8latest}
 
 [testenv]
