@@ -1,7 +1,8 @@
 name: Platform Tests
 
 on:
-  workflow_dispatch:
+  pull_request:
+    types: [ labeled ]
   push:
     branches:
       - main
@@ -9,11 +10,14 @@ on:
 
 env:
   # Increase this value to invalidate cache on this CI/CD pipeline
-  CACHE_NUMBER: 3
+  CACHE_NUMBER: 4
 
 
 jobs:
   platform-test:
+    if: |
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && github.event.label.name == 'platform-test')
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
