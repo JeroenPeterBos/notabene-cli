@@ -43,6 +43,17 @@ pip install notabene-cli
 
 For more information on how to get started **[visit the documentation](https://notabene-cli.readthedocs.io/en/latest)**.
 
+### Usage
+
+Ensure you have a `pyproject.toml` file in the root of your project (can be empty).
+Run on of the following commands to interact with the templates in your project.
+
+```
+notabene template create
+notabene template list
+notabene template use
+```
+
 ## Development Prerequisites
 
 If you're going to be working in the code (rather than just using the library), you'll want a few utilities.
