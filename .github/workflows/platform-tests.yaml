@@ -23,7 +23,7 @@ jobs:
   platform-test:
     if: |
       github.event_name == 'push' ||
-      (github.event_name == 'pull_request' && github.event.label.name == 'platform-test')
+      (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'platform-test'))
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
