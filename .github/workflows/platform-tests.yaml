@@ -40,17 +40,19 @@ jobs:
         with:
           activate-environment: notabene
           python-version: 3.8
+      - name: Get Conda Path
+        id: get-path
+        run: echo "::set-output name=condapath::$(echo $CONDA_PREFIX)"
+      - name: Cache env
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.get-path.outputs.condapath }}
+          key: conda-pt-${{ runner.os }}--${{ runner.arch }}-${{ hashFiles('requirements.txt') }}-${{ env.CACHE_NUMBER }}
+        id: cache
       - name: Setup Environment
         run:
           pip install tox tox-conda -c requirements.txt
-      - name: Run tox in parallel to test grid of dependencies
-        id: tox-parallel
-        continue-on-error: true
-        run:
-          tox -p
-        env:
-          TOX_PARALLEL_NO_SPINNER: 1
-      - name: Run tox sequentially if tox failed
-        if: steps.tox-parallel.outcome == 'failure'
+      - name: Run tox
+        # Simply run tox sequentially, parallel was causing weird issues on some platforms
         run:
           tox
