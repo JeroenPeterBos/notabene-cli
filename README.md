@@ -18,8 +18,10 @@ Bring best practices from software engineering to your jupyter notebooks using [
 
 Knowledge is best transfered when its presentation is familiar. Notabene enables you to standardize and simplify knowledge transfer on data insights.
 
-* Code Base: https://github.com/JeroenPeterBos/notabene-cli
+* Homepage: https://notabene.cloud/
+* Source Code: https://github.com/JeroenPeterBos/notabene-cli
 * Documentation: https://notabene-cli.readthedocs.io
+* PyPI: https://pypi.org/project/notabene-cli/
 
 ## Features
 

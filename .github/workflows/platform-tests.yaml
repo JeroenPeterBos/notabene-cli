@@ -36,12 +36,9 @@ jobs:
           python-version: 3.8
       - name: Setup Environment
         run:
-          pip install pip-tools
-      - name: Install Requirements
-        run:
-          pip-sync requirements.txt
+          pip install tox tox-conda -c requirements.txt
       - name: Run tox to test grid of dependencies
         run:
-          tox -p
+          tox
         env:
           TOX_PARALLEL_NO_SPINNER: 1
