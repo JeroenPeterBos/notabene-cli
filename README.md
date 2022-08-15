@@ -18,8 +18,10 @@ Bring best practices from software engineering to your jupyter notebooks using [
 
 Knowledge is best transfered when its presentation is familiar. Notabene enables you to standardize and simplify knowledge transfer on data insights.
 
-* Code Base: https://github.com/JeroenPeterBos/notabene-cli
+* Homepage: https://notabene.cloud/
+* Source Code: https://github.com/JeroenPeterBos/notabene-cli
 * Documentation: https://notabene-cli.readthedocs.io
+* PyPI: https://pypi.org/project/notabene-cli/
 
 ## Features
 
@@ -29,7 +31,7 @@ Knowledge is best transfered when its presentation is familiar. Notabene enables
 ## Getting Started
 
 The project's documentation contains a section to help you
-[get started](https://notabene-cli.readthedocs.io/en/latest/getting_started.html).
+[get started](https://notabene-cli.readthedocs.io/en/latest/quickstart.html).
 
 ### Installation
 
@@ -39,6 +41,17 @@ Install [NotaBene](https://github.com/JeroenPeterBos/notabene-cli) using:
 pip install notabene-cli
 ```
 
+### Usage
+
+Ensure you have a `pyproject.toml` file in the root of your project (can be empty).
+Run on of the following commands to interact with the templates in your project.
+
+```
+notabene template create
+notabene template list
+notabene template use
+```
+
 For more information on how to get started **[visit the documentation](https://notabene-cli.readthedocs.io/en/latest)**.
 
 ## Development Prerequisites
@@ -46,6 +59,7 @@ For more information on how to get started **[visit the documentation](https://n
 If you're going to be working in the code (rather than just using the library), you'll want a few utilities.
 
 * [GNU Make](https://www.gnu.org/software/make/)
+* [Conda](https://docs.conda.io/en/latest/miniconda.html)
 
 ## Authors
 

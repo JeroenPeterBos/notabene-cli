@@ -9,9 +9,8 @@ The command line interface for interacting with notabene.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-   getting_started
+   quickstart
    cli
    contributing
    requirements

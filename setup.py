@@ -45,14 +45,16 @@ setup(
     [console_scripts]
     notabene=notabene.cli:cli
     """,
-    python_requires=">=0.0.1",
+    python_requires=">=3.6",
     author="Jeroen Peter Bos",
     author_email="jeroen@notabene.cloud",
     # Use the URL to the github repo.
     url="https://github.com/JeroenPeterBos/notabene",
-    download_url=(
-        f"https://github.com/JeroenPeterBos/" f"notabene/archive/{version}.tar.gz"
-    ),
+    project_urls={
+        "Homepage": "https://notabene.cloud/",
+        "Source Code": "https://github.com/JeroenPeterBos/notabene",
+        "Documentation": "https://notabene-cli.readthedocs.io/",
+    },
     keywords=[
         # Add package keywords here.
     ],
@@ -65,10 +67,14 @@ setup(
         "Development Status :: 3 - Alpha",
         # Indicate who your project is intended for.
         "Intended Audience :: Developers",
+        "Intended Audience :: Science/Research",
         "Topic :: Software Development :: Libraries",
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Framework :: Jupyter",
     ],
     include_package_data=True,
 )

@@ -3,9 +3,9 @@
 .. toctree::
     :glob:
 
-***************
-Getting Started
-***************
+**********
+Quickstart
+**********
 
 Installing the Library
 ======================

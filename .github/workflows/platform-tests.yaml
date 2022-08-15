@@ -2,7 +2,13 @@ name: Platform Tests
 
 on:
   pull_request:
-    types: [ labeled ]
+    types:
+      - labeled
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - main
   push:
     branches:
       - main
@@ -17,14 +23,14 @@ jobs:
   platform-test:
     if: |
       github.event_name == 'push' ||
-      (github.event_name == 'pull_request' && github.event.label.name == 'platform-test')
+      (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'platform-test'))
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: 
           - ubuntu-latest
-#          - macos-latest
-#          - windows-latest
+          - macos-latest
+          - windows-latest
     defaults:
       run:
         shell: bash -l {0}
@@ -34,14 +40,19 @@ jobs:
         with:
           activate-environment: notabene
           python-version: 3.8
+      - name: Get Conda Path
+        id: get-path
+        run: echo "::set-output name=condapath::$(echo $CONDA_PREFIX)"
+      - name: Cache env
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.get-path.outputs.condapath }}
+          key: conda-pt-${{ runner.os }}--${{ runner.arch }}-${{ hashFiles('requirements.txt') }}-${{ env.CACHE_NUMBER }}
+        id: cache
       - name: Setup Environment
         run:
-          pip install pip-tools
-      - name: Install Requirements
+          pip install tox tox-conda -c requirements.txt
+      - name: Run tox
+        # Simply run tox sequentially, parallel was causing weird issues on some platforms
         run:
-          pip-sync requirements.txt
-      - name: Run tox to test grid of dependencies
-        run:
-          tox -p
-        env:
-          TOX_PARALLEL_NO_SPINNER: 1
+          tox

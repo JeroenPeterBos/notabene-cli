@@ -15,93 +15,88 @@ documentation.
 Targets
 -------
 
-This section contains a brief description of the targets defined in the
-``Makefile``.
+This section contains a brief description of the targets defined in the ``Makefile``.
 
-``clean``
-^^^^^^^^^
+``make install``
+^^^^^^^^^^^^^^^^
 
-Remove generated packages, documentation, temporary files, *etc*.
+Create the environment and install development dependencies
+
+
+``make destroy``
+^^^^^^^^^^^^^^^^
+
+Remove the conda environment. __Deactivate the conda environment before you run this command.__
+
+
+``make format``
+^^^^^^^^^^^^^^^
+
+Format all code and sort all imports.
+
 
 .. _make_lint:
 
-``lint``
-^^^^^^^^
+``make lint``
+^^^^^^^^^^^^^
 
-Run `pylint <https://www.pylint.org/>`_ against the project files.
+Run `pylint <https://www.pylint.org/>`_ and `flake8 <https://flake8.pycqa.org/en/latest/>` against the project files.
+
 
 .. _make_test:
 
-``test``
-^^^^^^^^
+``make test``
+^^^^^^^^^^^^^
 
 Run the unit tests.
 
-``quicktest``
-^^^^^^^^^^^^^
 
-Run the unit tests without performing pre-test validations (like
-:ref:`linting <make_lint>`).
-
-.. _make_docs:
-
-``docs``
-^^^^^^^^
-
-Build the documentation for production.
-
-.. note::
-
-    You can also build the documents directly, bypassing validations like
-    :ref:`linting <make_lint>` and :ref:`testing <make_test>` using
-    `Sphinx Makefile <https://github.com/mapnik/sphinx-docs/blob/master/Makefile>`_
-    directly.
-
-    .. code-block:: bash
-
-        cd docs
-        make clean && make html
-        make latexpdf
-
-.. _make_answers:
-
-``answers``
-^^^^^^^^^^^
-
-Perform a quick build of the documentation and open it in your browser.
-
-``package``
-^^^^^^^^^^^
-
-Build the package for publishing.
-
-.. _make-publish:
-
-``publish``
-^^^^^^^^^^^
-
-Publish the package to your repository.
-
-``build``
-^^^^^^^^^
-
-Install the current project locally so that you may run the command-line application.
-
-``venv``
-^^^^^^^^
-
-Create a virtual environment.
-
-``install``
-^^^^^^^^^^^
-
-Install (or update) project dependencies.
-
-``licenses``
+``make tox``
 ^^^^^^^^^^^^
 
-Generate a report of the projects dependencies and respective licenses.
+Run all tests in several conda environments with varying dependencies and python versions.
+
+
+``make coverage``
+^^^^^^^^^^^^^^^^^
+
+Generate an HTML coverage report. The report will be placed under `build/coverage/index.html`.
+
+
+``make licenses``
+^^^^^^^^^^^^^^^^^
+
+Generate a table of licenses from the dependencies to be included in the public documentation.
 
 .. note::
 
     If project dependencies change, please update this documentation.
+
+
+.. _make_docs:
+
+``make docs``
+^^^^^^^^^^^^^
+
+Build the public documentation.
+
+
+``make package``
+^^^^^^^^^^^^^^^^
+
+Build the package for publishing.
+
+
+.. _make-publish:
+
+``make publish``
+^^^^^^^^^^^^^^^^
+
+Publish the package to PyPI using twine.
+
+
+``make clean``
+^^^^^^^^^^^^^^
+
+Clean the project by deleting temporary files and local caches.
+
