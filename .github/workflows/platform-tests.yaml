@@ -29,8 +29,8 @@ jobs:
       matrix:
         os: 
           - ubuntu-latest
-#          - macos-latest
-#          - windows-latest
+          - macos-latest
+          - windows-latest
     defaults:
       run:
         shell: bash -l {0}
@@ -43,8 +43,14 @@ jobs:
       - name: Setup Environment
         run:
           pip install tox tox-conda -c requirements.txt
-      - name: Run tox to test grid of dependencies
+      - name: Run tox in parallel to test grid of dependencies
+        id: tox-parallel
+        continue-on-error: true
         run:
-          tox
+          tox -p
         env:
           TOX_PARALLEL_NO_SPINNER: 1
+      - name: Run tox sequentially if tox failed
+        if: steps.tox-parallel.outcome == 'failure'
+        run:
+          tox
