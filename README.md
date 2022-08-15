@@ -31,7 +31,7 @@ Knowledge is best transfered when its presentation is familiar. Notabene enables
 ## Getting Started
 
 The project's documentation contains a section to help you
-[get started](https://notabene-cli.readthedocs.io/en/latest/getting_started.html).
+[get started](https://notabene-cli.readthedocs.io/en/latest/quickstart.html).
 
 ### Installation
 
@@ -40,8 +40,6 @@ Install [NotaBene](https://github.com/JeroenPeterBos/notabene-cli) using:
 ```
 pip install notabene-cli
 ```
-
-For more information on how to get started **[visit the documentation](https://notabene-cli.readthedocs.io/en/latest)**.
 
 ### Usage
 
@@ -54,11 +52,14 @@ notabene template list
 notabene template use
 ```
 
+For more information on how to get started **[visit the documentation](https://notabene-cli.readthedocs.io/en/latest)**.
+
 ## Development Prerequisites
 
 If you're going to be working in the code (rather than just using the library), you'll want a few utilities.
 
 * [GNU Make](https://www.gnu.org/software/make/)
+* [Conda](https://docs.conda.io/en/latest/miniconda.html)
 
 ## Authors
 

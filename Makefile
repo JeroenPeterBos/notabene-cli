@@ -34,7 +34,7 @@ coverage: test  ## Generate an HTML coverage report
 
 licenses: docs/licenses.rst  ## Generate licenses from the dependencies
 docs/licenses.rst:
-	pip-licenses --with-url --format=rst --output-file docs/licenses.rst
+	pip-licenses --packages click --from c --with-url --format=rst --output-file docs/licenses.rst
 
 docs: clean lint docs/licenses.rst  ## Generate the documentation
 	sphinx-build -b html "docs" "build/docs"
