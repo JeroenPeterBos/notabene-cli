@@ -45,7 +45,7 @@ setup(
     [console_scripts]
     notabene=notabene.cli:cli
     """,
-    python_requires=">=3.7",
+    python_requires=">=3.6",
     author="Jeroen Peter Bos",
     author_email="jeroen@notabene.cloud",
     # Use the URL to the github repo.
