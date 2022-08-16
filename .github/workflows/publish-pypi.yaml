@@ -16,12 +16,12 @@ jobs:
         python-version: 3.8
     - name: Get Package Version
       id: package-version
-      run: echo "::set-output name=version::test-v$(python setup.py --version)"
+      run: echo "::set-output name=desired-tag::refs/tags/test-v$(python setup.py --version)"
     - name: Check tag against package version
-      if: steps.package-version.outputs.version != github.ref
+      if: steps.package-version.outputs.desired-tag != github.ref
       run: |
         echo "It looks like the version in the package did not match the version in the tag."
-        echo "${{ steps.package-version.outputs.version }} != ${{ github.ref }}"
+        echo "${{ steps.package-version.outputs.desired-tag }} != ${{ github.ref }}"
         exit 1
     - name: Setup Environment
       run:
