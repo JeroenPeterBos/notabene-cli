@@ -1,0 +1,27 @@
+name: Publish PyPI
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        activate-environment: notabene
+        python-version: 3.8
+    - name: Setup Environment
+      run:
+        pip install twine -c requirements.txt
+    - name: Package the code
+      run:
+        python setup.py sdist --dist-dir build/dist
+    - name: Publish package to TestPyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        repository_url: https://test.pypi.org/legacy/
+        packages_dir: build/dist/
