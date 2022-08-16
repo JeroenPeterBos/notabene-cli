@@ -3,9 +3,9 @@
 .. toctree::
     :glob:
 
-***************
-Getting Started
-***************
+*************
+Initial Setup
+*************
 
 This section provides instructions for setting up your development environment.  If you follow the
 steps from top to bottom you should be ready to roll by the end.

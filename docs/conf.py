@@ -125,6 +125,9 @@ html_theme_options = {
     "logo": "logo.png",
     "github_user": "JeroenPeterBos",
     "github_repo": "notabene-cli",
+    "sidebar_collapse": False,
+    "show_related": True,
+    "show_relbars": True,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
