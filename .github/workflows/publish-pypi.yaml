@@ -17,9 +17,12 @@ jobs:
     - name: Get Package Version
       id: package-version
       run: echo "::set-output name=version::test-v$(python setup.py --version)"
-    - name: Check tag agains package version
+    - name: Check tag against package version
       if: steps.package-version.outputs.version != github.ref
-      run: exit 1
+      run: |
+        echo "It looks like the version in the package did not match the version in the tag."
+        echo "${{ steps.package-version.outputs.version }} != ${{ github.ref }}"
+        exit 1
     - name: Setup Environment
       run:
         pip install twine -c requirements.txt
