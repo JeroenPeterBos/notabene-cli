@@ -1,8 +1,9 @@
 name: Publish PyPI
 
 on:
-  workflow_dispatch:
-
+  push:
+    tags:
+      - v**
 
 jobs:
   publish:
@@ -13,6 +14,15 @@ jobs:
       with:
         activate-environment: notabene
         python-version: 3.8
+    - name: Get Package Version
+      id: package-version
+      run: echo "::set-output name=desired-tag::refs/tags/v$(python setup.py --version)"
+    - name: Check tag against package version
+      if: steps.package-version.outputs.desired-tag != github.ref
+      run: |
+        echo "It looks like the version in the package did not match the version in the tag."
+        echo "${{ steps.package-version.outputs.desired-tag }} != ${{ github.ref }}"
+        exit 1
     - name: Setup Environment
       run:
         pip install twine -c requirements.txt
@@ -24,4 +34,10 @@ jobs:
       with:
         password: ${{ secrets.TEST_PYPI_API_TOKEN }}
         repository_url: https://test.pypi.org/legacy/
+        packages_dir: build/dist/
+        skip_existing: true
+    - name: Publish package to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.PYPI_API_TOKEN }}
         packages_dir: build/dist/
