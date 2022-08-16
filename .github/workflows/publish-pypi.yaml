@@ -1,8 +1,9 @@
 name: Publish PyPI
 
 on:
-  workflow_dispatch:
-
+  push:
+    tags:
+      - v**
 
 jobs:
   publish:
@@ -13,6 +14,12 @@ jobs:
       with:
         activate-environment: notabene
         python-version: 3.8
+    - name: Get Package Version
+      id: package-version
+      run: echo "::set-output name=version::v$(python setup.py --version)"
+    - name: Check tag agains package version
+      if: steps.package-version.outputs.version != github.ref
+      run: exit 1
     - name: Setup Environment
       run:
         pip install twine -c requirements.txt
@@ -25,3 +32,4 @@ jobs:
         password: ${{ secrets.TEST_PYPI_API_TOKEN }}
         repository_url: https://test.pypi.org/legacy/
         packages_dir: build/dist/
+        skip_existing: true
