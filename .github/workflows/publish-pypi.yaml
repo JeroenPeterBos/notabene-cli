@@ -3,7 +3,7 @@ name: Publish PyPI
 on:
   push:
     tags:
-      - test-v**
+      - v**
 
 jobs:
   publish:
@@ -16,7 +16,7 @@ jobs:
         python-version: 3.8
     - name: Get Package Version
       id: package-version
-      run: echo "::set-output name=desired-tag::refs/tags/test-v$(python setup.py --version)"
+      run: echo "::set-output name=desired-tag::refs/tags/v$(python setup.py --version)"
     - name: Check tag against package version
       if: steps.package-version.outputs.desired-tag != github.ref
       run: |
