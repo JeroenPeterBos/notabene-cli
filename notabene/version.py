@@ -8,4 +8,4 @@ This module contains project version information.
 .. moduleauthor:: Jeroen Peter Bos <jeroen@notabene.cloud>
 """
 
-__version__ = "0.0.3"  #: the working version
+__version__ = "0.0.4"  #: the working version
