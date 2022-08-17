@@ -159,3 +159,22 @@ def use(project: Project, template: str, notebook: str):
         fg="cyan",
         bold=True,
     )
+
+
+@template.command()
+@click.pass_obj
+def check(project: Project):
+    """Check that all notebooks in this project match to at least one template."""
+
+    
+    for notebook in (project.root / "notebooks").glob("*.ipynb"):
+        matching_template = None
+        for template in project.template_dir.glob("*.ipynb"):
+            # DO THE ACTUAL MATCHING CODE
+            matches = True
+            if matches:
+                matching_template = template
+        
+        if matching_template is None:
+            # No matching template found so let's fail the job
+            raise Exception()
