@@ -53,6 +53,16 @@ def pf_template_notebook(pf_template: Path, pf_notebook: Path):
     return pf_template
 
 
+@pytest.fixture
+def pf_template_bad_notebooks(pf_data_path: Path, pf_template_notebook: Path):
+    """Fixture project with a non-conforming notebook."""
+    shutil.copy(
+        pf_data_path / "notebooks" / "test_eda_no_match.ipynb",
+        pf_template_notebook / "notebooks",
+    )
+    return pf_template_notebook
+
+
 def test_fixtures(
     pf_empty: Path,
     pf_template: Path,
@@ -234,3 +244,21 @@ class TestUse:
             )
 
             assert result.exit_code == 2
+
+
+class TestCheck:
+    """Test the 'check' command."""
+
+    def test_all_good(self, pf_template_notebook: Path):
+        """Test all notebooks respect at least one template."""
+        with CliRunner().enter_fixture(pf_template_notebook) as runner:
+            result = runner.invoke(cli, ["template", "check"])
+
+            assert result.exit_code == 0
+
+    def test_one_disprespectful_notebook(self, pf_template_bad_notebooks: Path):
+        """Test failing on the check if a notebook does not respect any template."""
+        with CliRunner().enter_fixture(pf_template_bad_notebooks) as runner:
+            result = runner.invoke(cli, ["template", "check"])
+
+            assert result.exit_code == 1

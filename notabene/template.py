@@ -6,6 +6,9 @@ from pathlib import Path
 from typing import List
 
 import click
+import nbformat
+from click import ClickException
+from nbformat import NotebookNode
 
 from notabene.base import Project, base
 from notabene.utils import is_snake_case
@@ -62,7 +65,7 @@ def _select_template(templates: List[Path], template: str):
 def template(project: Project, template_dir: click.Path):
     """Use, check and create templates."""
     if template_dir is not None:
-        project.template_dir = Path(template_dir)
+        project.template_root = Path(template_dir)
 
 
 @template.command()
@@ -97,7 +100,7 @@ def create(project: Project, name: str, notebook: str):
         raise click.BadOptionUsage(
             option_name="name", message=f"A template with name '{name}' already exists."
         )
-    template_path = (project.template_dir / name).with_suffix(".ipynb")
+    template_path = (project.template_root / name).with_suffix(".ipynb")
 
     if notebook == "":
         # Select one of the notabene templates
@@ -161,20 +164,61 @@ def use(project: Project, template: str, notebook: str):
     )
 
 
+def notebook_respects_template(notebook: NotebookNode, template: NotebookNode) -> bool:
+    """Check if a notebook respects the template.
+
+    Args:
+        notebook (Path): The notebook object parsed using `nbformat`.
+        template (Path): The template object parsed using `nbformat`.
+
+    Returns:
+        bool: Whether the notebook respects the template.
+    """
+    tp_cursor = 0
+    nb_cursor = 0
+
+    while tp_cursor < len(template):
+        if nb_cursor >= len(notebook):
+            return False
+
+        tp_cell = template.cells[tp_cursor]
+        nb_cell = notebook.cells[nb_cursor]
+
+        # TODO: This check is way too simple, but for testing, this is fine now
+        if tp_cell.cell_type == nb_cell.cell_type:
+            tp_cursor += 1
+        nb_cursor += 1
+
+    return True
+
+
 @template.command()
 @click.pass_obj
 def check(project: Project):
     """Check that all notebooks in this project match to at least one template."""
+    click.secho("Checking if notebooks respect templates.", fg="cyan", bold=True)
 
-    
-    for notebook in (project.root / "notebooks").glob("*.ipynb"):
-        matching_template = None
-        for template in project.template_dir.glob("*.ipynb"):
-            # DO THE ACTUAL MATCHING CODE
-            matches = True
-            if matches:
-                matching_template = template
-        
-        if matching_template is None:
-            # No matching template found so let's fail the job
-            raise Exception()
+    # First we want to check each notebook
+    for path_notebook in project.get_notebooks():
+        nb_notebook = nbformat.read(path_notebook, as_version=4)
+
+        # Then whether the notebook respects any template.
+        respected_template = None
+        for path_template in project.get_templates():
+            nb_template = nbformat.read(path_template, as_version=4)
+
+            if notebook_respects_template(nb_notebook, nb_template):
+                respected_template = nb_template
+                break
+
+        if respected_template is None:
+            raise ClickException(
+                f"None of the templates matched the notebook: '{path_notebook}'"
+            )
+        log.info(
+            "Notebook '%s' matches template '%s'", path_notebook, respected_template
+        )
+
+    click.secho(
+        "All of the notebooks matched to at least one template", fg="cyan", bold=True
+    )
