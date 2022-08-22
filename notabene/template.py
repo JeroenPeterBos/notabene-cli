@@ -4,7 +4,7 @@ import logging
 import shutil
 from difflib import ndiff
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
 import click
 import nbformat
@@ -64,7 +64,7 @@ def _select_template(templates: List[Path], template: str):
 )
 @click.pass_obj
 def template(project: Project, template_dir: click.Path):
-    """Use, check and create templates."""
+    """The command line section for creating, using and checking notebook templates."""
     if template_dir is not None:
         project.template_root = Path(template_dir)
 
@@ -80,7 +80,7 @@ def template(project: Project, template_dir: click.Path):
 @click.argument("notebook", type=str)
 @click.pass_obj
 def create(project: Project, name: str, notebook: str):
-    """Create a new template."""
+    """Create a new template from an existing NOTEBOOK."""
     click.secho("Creating new template...", fg="cyan", bold=True)
     templates = project.get_templates()
 
@@ -124,7 +124,7 @@ def create(project: Project, name: str, notebook: str):
 @template.command(name="list")
 @click.pass_obj
 def list_command(project: Project):
-    """List all of your templates."""
+    """List all of the templates registered in this project."""
     templates = project.get_templates()
     if len(templates) > 0:
         _echo_templates(templates)
@@ -165,7 +165,7 @@ def use(project: Project, template: str, notebook: str):
     )
 
 
-def notebook_to_strings(notebook: NotebookNode) -> List[str]:
+def _notebook_to_strings(notebook: NotebookNode) -> List[str]:
     """Turn the notebook content into a list of strings.
 
     Args:
@@ -182,7 +182,9 @@ def notebook_to_strings(notebook: NotebookNode) -> List[str]:
     ]
 
 
-def notebook_respects_template(notebook: NotebookNode, template: NotebookNode) -> bool:
+def _notebook_respects_template(
+    notebook: NotebookNode, template: NotebookNode
+) -> Tuple[bool, str]:
     """Check if a notebook respects the template.
 
     Args:
@@ -192,12 +194,16 @@ def notebook_respects_template(notebook: NotebookNode, template: NotebookNode) -
     Returns:
         bool: Whether the notebook respects the template.
     """
-    notebook_lines = notebook_to_strings(notebook=notebook)
-    template_lines = notebook_to_strings(notebook=template)
+    notebook_lines = _notebook_to_strings(notebook=notebook)
+    template_lines = _notebook_to_strings(notebook=template)
 
     diff_lines = ndiff(template_lines, notebook_lines)
 
-    return not any(line[0] == "-" for line in diff_lines)
+    for line in diff_lines:
+        if line[0] == "-":
+            return False, line
+
+    return True, None
 
 
 @template.command()
@@ -211,20 +217,31 @@ def check(project: Project):
         nb_notebook = nbformat.read(path_notebook, as_version=4)
 
         # Then whether the notebook respects any template.
-        respected_template = None
+        path_respected = None
         for path_template in project.get_templates():
             nb_template = nbformat.read(path_template, as_version=4)
 
-            if notebook_respects_template(nb_notebook, nb_template):
-                respected_template = nb_template
-                break
+            respects_template, line_error = _notebook_respects_template(
+                nb_notebook, nb_template
+            )
 
-        if respected_template is None:
+            if respects_template:
+                path_respected = path_template
+                break
+            
+            log.info(
+                "Notebook '%s' does not respect template '%s' on line '%s'",
+                path_notebook,
+                path_respected,
+                line_error,
+            )
+
+        if path_respected is None:
             raise ClickException(
                 f"None of the templates matched the notebook: '{path_notebook}'"
             )
-        log.info(
-            "Notebook '%s' matches template '%s'", path_notebook, respected_template
+        click.secho(
+            f"Notebook '{path_notebook}' respects template '{path_respected.stem}'"
         )
 
     click.secho(
