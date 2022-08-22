@@ -228,7 +228,7 @@ def check(project: Project):
             if respects_template:
                 path_respected = path_template
                 break
-            
+
             log.info(
                 "Notebook '%s' does not respect template '%s' on line '%s'",
                 path_notebook,
