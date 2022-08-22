@@ -2,6 +2,7 @@
 
 import logging
 import shutil
+from difflib import ndiff
 from pathlib import Path
 from typing import List
 
@@ -164,6 +165,23 @@ def use(project: Project, template: str, notebook: str):
     )
 
 
+def notebook_to_strings(notebook: NotebookNode) -> List[str]:
+    """Turn the notebook content into a list of strings.
+
+    Args:
+        notebook (NotebookNode): The notebook object to convert.
+
+    Returns:
+        List[str]: The list of strings representing the notebook content.
+    """
+    return [
+        cell.cell_type + "|" + line
+        for cell in notebook.cells
+        for line in cell.source.splitlines()
+        if not line.isspace() and not line == ""
+    ]
+
+
 def notebook_respects_template(notebook: NotebookNode, template: NotebookNode) -> bool:
     """Check if a notebook respects the template.
 
@@ -174,22 +192,12 @@ def notebook_respects_template(notebook: NotebookNode, template: NotebookNode) -
     Returns:
         bool: Whether the notebook respects the template.
     """
-    tp_cursor = 0
-    nb_cursor = 0
+    notebook_lines = notebook_to_strings(notebook=notebook)
+    template_lines = notebook_to_strings(notebook=template)
 
-    while tp_cursor < len(template):
-        if nb_cursor >= len(notebook):
-            return False
+    diff_lines = ndiff(template_lines, notebook_lines)
 
-        tp_cell = template.cells[tp_cursor]
-        nb_cell = notebook.cells[nb_cursor]
-
-        # TODO: This check is way too simple, but for testing, this is fine now
-        if tp_cell.cell_type == nb_cell.cell_type:
-            tp_cursor += 1
-        nb_cursor += 1
-
-    return True
+    return not any(line[0] == "-" for line in diff_lines)
 
 
 @template.command()
