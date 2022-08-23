@@ -2,10 +2,14 @@
 
 import logging
 import shutil
+from difflib import ndiff
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
 import click
+import nbformat
+from click import ClickException
+from nbformat import NotebookNode
 
 from notabene.base import Project, base
 from notabene.utils import is_snake_case
@@ -60,9 +64,9 @@ def _select_template(templates: List[Path], template: str):
 )
 @click.pass_obj
 def template(project: Project, template_dir: click.Path):
-    """Use, check and create templates."""
+    """Create, use and check notebook template cli-subsection."""
     if template_dir is not None:
-        project.template_dir = Path(template_dir)
+        project.template_root = Path(template_dir)
 
 
 @template.command()
@@ -76,7 +80,7 @@ def template(project: Project, template_dir: click.Path):
 @click.argument("notebook", type=str)
 @click.pass_obj
 def create(project: Project, name: str, notebook: str):
-    """Create a new template."""
+    """Create a new template from an existing NOTEBOOK."""
     click.secho("Creating new template...", fg="cyan", bold=True)
     templates = project.get_templates()
 
@@ -97,7 +101,7 @@ def create(project: Project, name: str, notebook: str):
         raise click.BadOptionUsage(
             option_name="name", message=f"A template with name '{name}' already exists."
         )
-    template_path = (project.template_dir / name).with_suffix(".ipynb")
+    template_path = (project.template_root / name).with_suffix(".ipynb")
 
     if notebook == "":
         # Select one of the notabene templates
@@ -120,7 +124,7 @@ def create(project: Project, name: str, notebook: str):
 @template.command(name="list")
 @click.pass_obj
 def list_command(project: Project):
-    """List all of your templates."""
+    """List all of the templates registered in this project."""
     templates = project.get_templates()
     if len(templates) > 0:
         _echo_templates(templates)
@@ -158,4 +162,88 @@ def use(project: Project, template: str, notebook: str):
         f"Created notebook '{notebook}' using template '{template_path.stem}'.",
         fg="cyan",
         bold=True,
+    )
+
+
+def _notebook_to_strings(notebook: NotebookNode) -> List[str]:
+    """Turn the notebook content into a list of strings.
+
+    Args:
+        notebook (NotebookNode): The notebook object to convert.
+
+    Returns:
+        List[str]: The list of strings representing the notebook content.
+    """
+    return [
+        cell.cell_type + "|" + line
+        for cell in notebook.cells
+        for line in cell.source.splitlines()
+        if not line.isspace() and not line == ""
+    ]
+
+
+def _notebook_respects_template(
+    notebook: NotebookNode, template: NotebookNode
+) -> Tuple[bool, str]:
+    """Check if a notebook respects the template.
+
+    Args:
+        notebook (Path): The notebook object parsed using `nbformat`.
+        template (Path): The template object parsed using `nbformat`.
+
+    Returns:
+        bool: Whether the notebook respects the template.
+    """
+    notebook_lines = _notebook_to_strings(notebook=notebook)
+    template_lines = _notebook_to_strings(notebook=template)
+
+    diff_lines = ndiff(template_lines, notebook_lines)
+
+    for line in diff_lines:
+        if line[0] == "-":
+            return False, line
+
+    return True, None
+
+
+@template.command()
+@click.pass_obj
+def check(project: Project):
+    """Check that all notebooks in this project match to at least one template."""
+    click.secho("Checking if notebooks respect templates.", fg="cyan", bold=True)
+
+    # First we want to check each notebook
+    for path_notebook in project.get_notebooks():
+        nb_notebook = nbformat.read(path_notebook, as_version=4)
+
+        # Then whether the notebook respects any template.
+        path_respected = None
+        for path_template in project.get_templates():
+            nb_template = nbformat.read(path_template, as_version=4)
+
+            respects_template, line_error = _notebook_respects_template(
+                nb_notebook, nb_template
+            )
+
+            if respects_template:
+                path_respected = path_template
+                break
+
+            log.info(
+                "Notebook '%s' does not respect template '%s' on line '%s'",
+                path_notebook,
+                path_respected,
+                line_error,
+            )
+
+        if path_respected is None:
+            raise ClickException(
+                f"None of the templates matched the notebook: '{path_notebook}'"
+            )
+        click.secho(
+            f"Notebook '{path_notebook}' respects template '{path_respected.stem}'"
+        )
+
+    click.secho(
+        "All of the notebooks matched to at least one template", fg="cyan", bold=True
     )

@@ -80,3 +80,26 @@ To make use of an existing template to create a new notebook named ``your-notebo
 .. code-block:: console
 
     notabene template use <your-notebook.ipynb>
+
+
+Quality check all notebooks
+---------------------------
+
+Quality check all notebooks to make sure they all respect at least one of your templates.
+Will fail if a notebook is found that does not respect any notebooks.
+A common use-case is to include this step in your git project as a quality check for merge requests. 
+(`GitLab CICD <https://docs.gitlab.com/ee/ci/>`_, `Github Actions <https://docs.github.com/en/actions>`_)
+
+.. code-block:: console
+
+    notabene template check
+
+
+List the registered notebooks
+-----------------------------
+
+Show a list of the templates you registered in this project.
+
+.. code-block:: console
+
+    notabene template list

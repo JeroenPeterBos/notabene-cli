@@ -27,7 +27,8 @@ class Project:
         """Create the `Project` object to be used troughout the cli."""
         self.log_level = log_level
         self.root = self._find_project_root()
-        self.template_dir = self.root / ".notabene" / "templates"
+        self.template_root = self.root / ".notabene" / "templates"
+        self.notebook_root = self.root / "notebooks"
 
     def _find_project_root(self) -> Path:
         cwd = path = Path(os.getcwd())
@@ -43,9 +44,33 @@ class Project:
         Returns:
             List[Path]: A list of paths to all the templates.
         """
-        templates = list(self.template_dir.glob("*.ipynb"))
-        log.info("Retrieved %s templates from '%s'", len(templates), self.template_dir)
+        templates = list(self.template_root.glob("*.ipynb"))
+
+        if len(templates) > 0:
+            log.info(
+                "Retrieved %s templates from '%s'", len(templates), self.template_root
+            )
+        else:
+            log.warning("No templates were found in '%s'", self.template_root)
+
         return sorted(templates)
+
+    def get_notebooks(self) -> List[Path]:
+        """Get a list of all the notebooks in the project.
+
+        Returns:
+            List[Path]: A list of paths to all the notebooks in this project.
+        """
+        notebooks = list(self.notebook_root.glob("*.ipynb"))
+
+        if len(notebooks) > 0:
+            log.info(
+                "Retrieved %s notebooks from '%s'", len(notebooks), self.template_root
+            )
+        else:
+            log.warning("No templates were found in '%s'", self.template_root)
+
+        return sorted(notebooks)
 
 
 @click.group()
