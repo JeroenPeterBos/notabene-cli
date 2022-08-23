@@ -7,6 +7,13 @@ from typing import List
 
 import click
 
+try:
+    from importlib import resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    import importlib_resources as resources
+
+from notabene import templates as baked_in_templates
 from notabene.base import Project, base
 from notabene.utils import is_snake_case
 
@@ -73,16 +80,33 @@ def template(project: Project, template_dir: click.Path):
     default="",
     help="The name of the new template. An option prompt is shown if left empty.",
 )
-@click.argument("notebook", type=str)
+@click.argument("notebook", type=str, required=False, default="")
 @click.pass_obj
 def create(project: Project, name: str, notebook: str):
     """Create a new template."""
     click.secho("Creating new template...", fg="cyan", bold=True)
-    templates = project.get_templates()
 
+    log.info("First, selecting a notebook to turn into a template")
+    if notebook == "":
+        log.info("No notebook was passed so we offer one of the baked in templates")
+        with resources.path(
+            baked_in_templates, "exploratory_data_analysis.ipynb"
+        ) as template_path:
+            notebook = template_path
+    else:
+        log.info("The notebook '%s' was passed with the command.", notebook)
+        notebook = Path(notebook).with_suffix(".ipynb")
+        if not notebook.exists():
+            raise click.BadArgumentUsage(
+                f"The notebook '{notebook.resolve()}' does not exist."
+            )
+
+    log.info("Selected notebook '%s' located at '%s'", notebook.stem, notebook)
+
+    templates = project.get_templates()
     if name == "":
         while True:
-            name = click.prompt("Pick a name for the template", type=str)
+            name = click.prompt("Pick a name to assign to the template", type=str)
             if is_snake_case(name):
                 if name not in [t.stem for t in templates]:
                     break
@@ -99,21 +123,12 @@ def create(project: Project, name: str, notebook: str):
         )
     template_path = (project.template_dir / name).with_suffix(".ipynb")
 
-    if notebook == "":
-        # Select one of the notabene templates
-        # https://stackoverflow.com/questions/6028000/how-to-read-a-static-file-from-inside-a-python-package
-        # Implement this later
-        pass  # pragma: no cover
-    elif not Path(notebook).with_suffix(".ipynb").exists():
-        abs_path = Path(notebook).with_suffix(".ipynb").resolve()
-        raise click.BadArgumentUsage(f"The notebook '{abs_path}' does not exist.")
-    else:
-        notebook = Path(notebook).with_suffix(".ipynb")
-
     template_path.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy(notebook, template_path)
     click.secho(
-        f"Created template '{name}' using notebook '{notebook}'.", fg="cyan", bold=True
+        f"Created template '{name}' using the '{notebook.stem}' notebook.",
+        fg="cyan",
+        bold=True,
     )
 
 

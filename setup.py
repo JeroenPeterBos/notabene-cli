@@ -39,6 +39,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
+    package_data={"notabene": ["templates/*.ipynb"]},
     version=version,
     install_requires=requirements,
     entry_points="""
