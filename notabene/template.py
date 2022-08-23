@@ -64,7 +64,7 @@ def _select_template(templates: List[Path], template: str):
 )
 @click.pass_obj
 def template(project: Project, template_dir: click.Path):
-    """The command line section for creating, using and checking notebook templates."""
+    """Create, use and check notebook template cli-subsection."""
     if template_dir is not None:
         project.template_root = Path(template_dir)
 
